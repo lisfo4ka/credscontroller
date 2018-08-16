@@ -35,16 +35,16 @@ spec:
           protocol: TCP
         args:
         - server
-        - -log-level=debug    
+        - -log-level=debug
         env:
         - name: SKIP_SETCAP
-          value: 'true' 
+          value: 'true'
         - name: VAULT_LOCAL_CONFIG
           valueFrom:
             configMapKeyRef:
               name: vault-config
               key: vault-config
-        volumeMounts:      
+        volumeMounts:
         - name: vault-file-backend
           mountPath: /vault/file
           readOnly: false
@@ -54,19 +54,19 @@ spec:
           httpGet:
             path: 'v1/sys/health?standbyok=true&standbycode=200&sealedcode=200&uninitcode=200'
             port: 8200
-            scheme: HTTPS
+            scheme: HTTP
         readinessProbe:
           httpGet:
             path: 'v1/sys/health?standbyok=true&standbycode=200&sealedcode=200&uninitcode=200'
             port: 8200
-            scheme: HTTPS                                        
+            scheme: HTTP
       volumes:
       - name: vault-file-backend
         persistentVolumeClaim:
           claimName: vault-file-backend
       - name: vault-cert
         secret:
-          secretName: vault-cert          
+          secretName: vault-cert
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -77,4 +77,4 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi                    
+      storage: 1Gi
